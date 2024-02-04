@@ -39,7 +39,7 @@ async def fetch_html_content(url, cookies):
             await context.add_cookies(cookies)
 
         page = await context.new_page()
-        await page.goto(url, timeout=0, wait_until='domcontentloaded')
+        await page.goto(url, timeout=0, wait_until='commit')
         try:
             await page.wait_for_selector('.product-buy__price')
             await page.wait_for_selector('div.order-avail-wrap')
