@@ -5,6 +5,7 @@ from utils.json_utils import json_write
 from bs4 import BeautifulSoup
 from time import sleep
 import asyncio
+import random
 
 import debug
 
@@ -50,8 +51,8 @@ async def main():
         print(debug.i(), 'Запись информации товара с id', product_id, 'в json')
         json_write(product_id=product_id, product_info=product_info)
 
-        # Ожидание 5 сек во избежание тайм-аута
-        sleep(5)
+        # Ожидание 4-6 сек во избежание тайм-аута
+        sleep(random.randrange(start=4, stop=7))
 
 if __name__ == "__main__":
     asyncio.run(main())
