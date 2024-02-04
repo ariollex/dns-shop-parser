@@ -42,7 +42,7 @@ async def fetch_html_content(url, cookies):
         await page.goto(url, timeout=0, wait_until='domcontentloaded')
         try:
             await page.wait_for_selector('.product-buy__price')
-            await page.wait_for_selector('.order-avail-wrap')
+            await page.wait_for_selector('div.order-avail-wrap')
         except Exception:  # Иногда dns-shop.ru почему-то перестаёт загружать .product-buy__price, так и не получив его.
             print(debug.w(), 'Не удалось получить .product-buy__price или .order-avail-wrap. Повторение попытки '
                              'через 10 секунд')
