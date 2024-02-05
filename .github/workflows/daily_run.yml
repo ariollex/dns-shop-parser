@@ -19,9 +19,29 @@ jobs:
       with:
         python-version: 3.12
 
+    - name: Cache Python dependencies
+      id: cache-python
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/pip
+        key: ${{ runner.os }}-python-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-python-
+
+
     - name: Install Dependencies
       run: |
         pip install -r requirements.txt
+
+    - name: Cache Playwright dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/ms-playwright.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
 
     - name: Install Playwright
       run: playwright install firefox
