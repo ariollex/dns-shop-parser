@@ -47,7 +47,7 @@ async def fetch_html_content(url, cookies):
             print(debug.w(), 'Не удалось получить .product-buy__price или .order-avail-wrap. Повторение попытки '
                              'через 10 секунд')
             sleep(10)
-            return fetch_html_content(url, cookies)
+            return await fetch_html_content(url, cookies)
 
         # Получение контента страницы
         html_content = await page.content()
