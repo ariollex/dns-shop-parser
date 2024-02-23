@@ -18,6 +18,7 @@ async def main():
     for i in file:
         if i != '\n':
             ids.append(str(int(i)))
+    random.shuffle(ids)
     print(debug.i(), 'Все ID товаров:', *ids)
 
     # Получение куки
