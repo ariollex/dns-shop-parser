@@ -1,23 +1,24 @@
 from request_data import get_cookies_list, get_characteristics_url, fetch_html_content
 from decode_data import get_price, get_availability, get_group, get_characteristics
-from utils.json_utils import json_write
 
 from bs4 import BeautifulSoup
 from time import sleep
 import asyncio
 import random
+import json
 
 import debug
 
 
 async def main():
-    print(debug.i(), 'чтение id...')
+    print(debug.i(), 'Чтение id...')
     # Чтение input.txt с id товаров
     file = open('input.txt')
     ids = []
     for i in file:
         if i != '\n':
             ids.append(str(int(i)))
+    print(debug.i(), 'Все ID товаров:', *ids)
 
     # Получение куки
     cookies_list = await get_cookies_list()
@@ -41,18 +42,34 @@ async def main():
 
         # Словарь с характеристиками товара
         product_info = {
-            "Цена": price,
-            "В наличии в магазинах": availability,
-            "Группа": group,
-            "Характеристики": characteristics
+            product_id:
+                {
+                    "Цена": price,
+                    "В наличии в магазинах": availability,
+                    "Группа": group,
+                    "Характеристики": characteristics
+                }
         }
+
+        # Чтение данных из существующего файла, если он существует
+        existing_data = {}
+        try:
+            with open('output.json', 'r', encoding='utf-8') as json_file:
+                existing_data = json.load(json_file)
+        except FileNotFoundError:
+            ...
+
+        # Добавление новых данных
+        existing_data.update(product_info)
 
         # Запись в json
         print(debug.i(), 'Запись информации товара с id', product_id, 'в json')
-        json_write(product_id=product_id, product_info=product_info)
+        with open('output.json', 'w', encoding='utf-8') as json_file:
+            json.dump(existing_data, json_file, ensure_ascii=False, indent=4)
 
-        # Ожидание 4-6 сек во избежание тайм-аута
-        sleep(random.randrange(start=4, stop=7))
+        # Ожидание 4-8 сек во избежание тайм-аута
+        sleep(random.randrange(start=4, stop=9))
+
 
 if __name__ == "__main__":
     asyncio.run(main())
