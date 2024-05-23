@@ -13,7 +13,10 @@ async def get_cookies_list():
         context = await browser.new_context()
         page = await context.new_page()
         await page.goto("https://www.dns-shop.ru/")
-        await page.wait_for_selector('.homepage__container')
+        try:
+            await page.wait_for_selector('.homepage__container')
+        except playwright._impl._errors.TimeoutError:
+            return await get_cookies_list()
         cookies_list = await context.cookies()
         await browser.close()
     return cookies_list
